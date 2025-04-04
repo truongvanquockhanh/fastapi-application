@@ -137,7 +137,7 @@ Enable the sites:
 
 ```sh
 
-sudo ln -s /etc/nginx/sites-available/bug-api.khanhtruong.space /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/your_file.space /etc/nginx/sites-enabled/
 ```
 
 Check Nginx and restart:
