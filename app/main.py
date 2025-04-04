@@ -3,6 +3,10 @@ from contextlib import asynccontextmanager
 from app.database import engine, Base
 from app.api.routes import user, auth, project, bug, note
 from fastapi.middleware.cors import CORSMiddleware
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,14 +18,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # Allow frontend origin
-origins = [
-    "http://localhost:3000",  # your React/TS frontend
-    # add any additional origins as needed
-]
+origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,            # or ["*"] to allow all (not recommended for prod)
+    allow_origins=[origin.strip() for origin in origins if origin.strip()],            # or ["*"] to allow all (not recommended for prod)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
