@@ -21,7 +21,32 @@ def create_project(db: Session, project_data: ProjectCreated, user: str):
     db.commit()
     db.refresh(project_member)
 
-    return project
+    members = []
+    for project_member in project.members:
+        members.append(ProjectMemberResponse(
+            id=project_member.id,
+            joinedAt=project_member.joined_at,
+            member=UserResponse(id=project_member.members.id, username=project_member.members.username)
+        ))
+
+    list_bugs = []
+    bugs = db.query(Bug).filter(Bug.projectId == project.id).all()
+    if bugs:
+        for bug in bugs:
+            list_bugs.append({
+                "id": bug.id
+            })
+
+    return ProjectResponse(
+        id = project.id,
+        name = project.name,
+        createdAt = project.createdAt,
+        updatedAt = project.updatedAt,
+        createdBy = member,
+        members = members,
+        bugs = list_bugs
+    )
+
 
 def get_project(db: Session, project_id: UUID):
     """Get project by ID"""

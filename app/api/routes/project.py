@@ -19,7 +19,7 @@ def get_projects(
     projects = get_all_projects(db, name=name, sort_by=sort_by, sort_order=sort_order)
     return projects
 
-@router.post("/projects", response_model=ProjectCreateReponse)
+@router.post("/projects", response_model=ProjectResponse)
 def create_projects(
     project_data: ProjectCreated,
     db: Session = Depends(get_db),
