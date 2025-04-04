@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.auth import LogInRequest, SignupRequest
+from app.schemas.auth import LogInRequest, SignupRequest, SignupResponse
 from app.core.security import hash_password
 from app.core.security import verify_password
 from app.core.security import create_access_token
@@ -34,4 +34,9 @@ def sign_up(db: Session, user: SignupRequest):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user
+    to_token = {
+      "username": db_user.username,
+      "password": db_user.password,
+    }
+    token = create_access_token(to_token)
+    return SignupResponse(id=db_user.id, username=db_user.username, token=token)

@@ -18,3 +18,4 @@ class SignupRequest(BaseModel):
 class SignupResponse(BaseModel):
     id: UUID
     username: str
+    token: str
