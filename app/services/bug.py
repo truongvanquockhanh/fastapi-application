@@ -41,10 +41,14 @@ def get_all_bugs(db: Session, title: str = None, priority: PriorityEnum = None, 
         else:
             query = query.order_by(Bug.id.desc())
 
+    query = query.filter(Bug.projectId == projectId)
+
     bugs = query.all()
 
     if not bugs:
         raise HTTPException(status_code=404, detail="No bugs found")
+    
+    
 
     bugs = query.all()
     for bug in bugs:
